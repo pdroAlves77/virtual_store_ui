@@ -36,7 +36,7 @@ export function SignUpView() {
     console.log('Dados do formulário:', formData);
     // Aqui você pode enviar os dados para a API, etc.
     setLoading(true)
-    fetch('http://localhost:3000/api/users', {method: 'POST', body: JSON.stringify(formData), headers: {
+    fetch('https://virtual-store-exwil69up-pedro-alves-projects-b3253365.vercel.app/api/users', {method: 'POST', body: JSON.stringify(formData), headers: {
       'Content-Type': 'application/json',
     }})
       .then((res) => {

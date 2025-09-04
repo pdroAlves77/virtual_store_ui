@@ -94,7 +94,7 @@ export function ProductsView() {
     (key) => filters[key as keyof FiltersProps] !== defaultFilters[key as keyof FiltersProps]
   );
     useEffect(() => {
-      fetch('http://localhost:3000/api/products' + (search !== '' ? '?name=' + search : ''))
+      fetch('https://virtual-store-exwil69up-pedro-alves-projects-b3253365.vercel.app/api/products' + (search !== '' ? '?name=' + search : ''))
         .then((res) => {
           if (!res.ok) {
             throw new Error('Erro ao buscar produtos');
