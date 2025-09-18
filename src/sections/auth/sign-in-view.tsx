@@ -33,7 +33,7 @@ export function SignInView() {
 
   const handleSignIn = () => {
     setLoading(true);
-        fetch('virtual-store-api.vercel.app/api/auth/login', {method: 'POST', body: JSON.stringify(formData), headers: {
+        fetch('https://virtual-store-api.vercel.app/api/auth/login', {method: 'POST', body: JSON.stringify(formData), headers: {
             'Content-Type': 'application/json',
         }})
         .then((res) => {    

@@ -42,7 +42,7 @@ export function UserView() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-    fetch('virtual-store-api.vercel.app/api/users' + (search !== '' ? '?name=' + search : ''))
+    fetch('https://virtual-store-api.vercel.app/api/users' + (search !== '' ? '?name=' + search : ''))
       .then((res) => {
         if (!res.ok) {
           throw new Error('Erro ao buscar usuários');

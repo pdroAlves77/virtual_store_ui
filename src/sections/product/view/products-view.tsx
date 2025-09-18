@@ -94,7 +94,7 @@ export function ProductsView() {
     (key) => filters[key as keyof FiltersProps] !== defaultFilters[key as keyof FiltersProps]
   );
     useEffect(() => {
-      fetch('virtual-store-api.vercel.app/api/products' + (search !== '' ? '?name=' + search : ''))
+      fetch('https://virtual-store-api.vercel.app/api/products' + (search !== '' ? '?name=' + search : ''))
         .then((res) => {
           if (!res.ok) {
             throw new Error('Erro ao buscar produtos');
