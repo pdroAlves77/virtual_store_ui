@@ -33,7 +33,7 @@ export function SignInView() {
 
   const handleSignIn = () => {
     setLoading(true);
-        fetch('https://virtual-store-exwil69up-pedro-alves-projects-b3253365.vercel.app/api/auth/login', {method: 'POST', body: JSON.stringify(formData), headers: {
+        fetch('virtual-store-api.vercel.app/api/auth/login', {method: 'POST', body: JSON.stringify(formData), headers: {
             'Content-Type': 'application/json',
         }})
         .then((res) => {    
