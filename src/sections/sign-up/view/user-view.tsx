@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
+import { useRouter } from 'src/routes/hooks';
+
 import { _users } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
 
@@ -28,7 +30,7 @@ import type { UserProps } from '../user-table-row';
 
 export function UserView() {
   const table = useTable();
-
+  const router = useRouter();
   const [filterName, setFilterName] = useState('');
 
   /*const dataFiltered: any[] = applyFilter({
@@ -77,6 +79,7 @@ export function UserView() {
           variant="contained"
           color="inherit"
           startIcon={<Iconify icon="mingcute:add-line" />}
+          onClick={() => router.push('/sign-up')}
         >
           New user
         </Button>
