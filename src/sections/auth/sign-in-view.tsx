@@ -10,6 +10,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { useRouter } from 'src/routes/hooks';
 
+import api from 'src/api';
+
 import { Iconify } from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
@@ -33,20 +35,12 @@ export function SignInView() {
 
   const handleSignIn = () => {
     setLoading(true);
-        fetch('https://virtual-store-api.vercel.app/api/auth/login', {method: 'POST', body: JSON.stringify(formData), headers: {
-            'Content-Type': 'application/json',
-        }})
-        .then((res) => {    
-            if (!res.ok){
-                throw new Error('Erro ao fazer login.');
-            }
-            return res.json();
-        })
-        .then((data) => {
+        api.post('/auth/login', formData)
+        .then((data:any) => {
             setLoading(false);
             alert("Login realizado com sucesso!");
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('data', JSON.stringify(data.data));
+            localStorage.setItem('token', data.data.token);
+            localStorage.setItem('data', JSON.stringify(data.data.data));
             router.push('/');
             // Aqui você pode redirecionar o usuário ou armazenar o token
         })

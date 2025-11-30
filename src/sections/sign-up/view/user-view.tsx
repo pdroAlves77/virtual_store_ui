@@ -11,6 +11,7 @@ import TablePagination from '@mui/material/TablePagination';
 
 import { useRouter } from 'src/routes/hooks';
 
+import api from 'src/api';
 import { _users } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
 
@@ -43,24 +44,31 @@ export function UserView() {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(0);
+  const [limit, setLimit] = useState(5);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   useEffect(() => {
-    fetch('https://virtual-store-api.vercel.app/api/users' + (search !== '' ? '?name=' + search : ''))
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Erro ao buscar usuários');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setUsers(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError(err.message);
-        setLoading(false);
-      });
-  }, [search]);
+    console.log(table.selected)
+  }, [table.selected]);
+  useEffect(() => {
+    getUsers();
+  }, [search, page, limit]);
+  const getUsers = () => {
+    api.get(`/users?page=${page}&limit=${limit}` + (search !== '' ? '&name=' + search : ''))
+
+    .then((data:any) => {
+      setUsers(data.data.data);
+      setLoading(false);
+      setTotal(data.data.total);
+      setTotalPages(data.data.totalPages);
+    })
+    .catch((err) => {
+      console.error(err);
+      setError(err.message);
+      setLoading(false);
+    });
+  }
   const notFound = !users.length && !!filterName;
 
   return (
@@ -87,6 +95,8 @@ export function UserView() {
 
       <Card>
         <UserTableToolbar
+          refreshTable={getUsers}
+          items={table.selected}
           numSelected={table.selected.length}
           filterName={search}
           onFilterName={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,13 +111,13 @@ export function UserView() {
               <UserTableHead
                 order={table.order}
                 orderBy={table.orderBy}
-                rowCount={_users.length}
+                rowCount={users.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    _users.map((user) => user.id)
+                      users.map((user:any) => user._id)
                   )
                 }
                 headLabel={[
@@ -127,11 +137,6 @@ export function UserView() {
                     />
                   ))}
 
-                <TableEmptyRows
-                  height={68}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)}
-                />
-
                 {notFound && <TableNoData searchQuery={filterName} />}
               </TableBody>
             </Table>
@@ -140,8 +145,8 @@ export function UserView() {
 
         <TablePagination
           component="div"
-          page={table.page}
-          count={_users.length}
+          page={page}
+          count={total}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
           rowsPerPageOptions={[5, 10, 25]}

@@ -5,6 +5,8 @@ import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 
+import api from 'src/api';
+
 import { Iconify } from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
@@ -13,9 +15,20 @@ type UserTableToolbarProps = {
   numSelected: number;
   filterName: string;
   onFilterName: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  items: string[];
+  refreshTable: () => void;
 };
 
-export function UserTableToolbar({ numSelected, filterName, onFilterName }: UserTableToolbarProps) {
+export function UserTableToolbar({ numSelected, filterName, onFilterName, items, refreshTable }: UserTableToolbarProps) {
+  const deleteItems = () => {
+    Promise.allSettled(items.map((id) => api.delete(`/users/${id}`)))
+      .then((results) => {
+        results.forEach((res) => {
+          if (res.status === 'rejected') console.error(res.reason);
+        });
+        refreshTable();
+      });
+  }
   return (
     <Toolbar
       sx={{
@@ -49,7 +62,7 @@ export function UserTableToolbar({ numSelected, filterName, onFilterName }: User
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
+        <Tooltip title="Delete" onClick={ ()=> deleteItems()}>
           <IconButton>
             <Iconify icon="solar:trash-bin-trash-bold" />
           </IconButton>

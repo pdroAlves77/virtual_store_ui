@@ -9,6 +9,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { useRouter } from 'src/routes/hooks';
 
+import api from 'src/api';
+
 import { Iconify } from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
@@ -36,16 +38,9 @@ export function SignUpView() {
     console.log('Dados do formulário:', formData);
     // Aqui você pode enviar os dados para a API, etc.
     setLoading(true)
-    fetch('https://virtual-store-api.vercel.app/api/users', {method: 'POST', body: JSON.stringify(formData), headers: {
-      'Content-Type': 'application/json',
-    }})
-      .then((res) => {
-        if (!res.ok){
-          throw new Error('Erro ao buscar usuários.')
-        }
-        return res.json();
-      })
-    .then((data) => {
+    //https://virtual-store-api.vercel.app/api/users
+    api.post('/users', formData)
+    .then((data:any) => {
       setLoading(false);
       alert("Usuário cadastrado com sucesso!")
       router.push('/')
@@ -129,8 +124,7 @@ export function SignUpView() {
   );
 
   return (
-    <>
-      <Box
+    <Box
         sx={{
           gap: 0.5,
           display: 'flex',
@@ -141,7 +135,6 @@ export function SignUpView() {
       >
         <Typography variant="h5">Create User</Typography>
         {renderForm}
-      </Box>    
-    </>
+      </Box>
   );
 }
